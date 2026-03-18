@@ -1,0 +1,34 @@
+"""Workspace simulator scenario template."""
+
+from roboclaw.embodied.definition.systems.simulators import SimulatorScenario
+from roboclaw.embodied.workspace import (
+    WORKSPACE_SCHEMA_VERSION,
+    WorkspaceAssetContract,
+    WorkspaceAssetKind,
+    WorkspaceExportConvention,
+    WorkspaceProvenance,
+)
+
+WORKSPACE_ASSET = WorkspaceAssetContract(
+    kind=WorkspaceAssetKind.SCENARIO,
+    schema_version=WORKSPACE_SCHEMA_VERSION,
+    export_convention=WorkspaceExportConvention.SCENARIO,
+    provenance=WorkspaceProvenance(
+        source="workspace_template",
+        generator="roboclaw_agent",
+        generated_by="<generated_by>",
+        generated_at="<generated_at_iso8601>",
+        source_session="<source_session_id>",
+    ),
+)
+
+SCENARIO = SimulatorScenario(
+    id="<scenario_id>",
+    assembly_id="<assembly_id>",
+    target_id="<target_id>",
+    world_id="<world_id>",
+    description="<scenario_description>",
+    notes=(
+        "Workspace simulator scenario.",
+    ),
+)

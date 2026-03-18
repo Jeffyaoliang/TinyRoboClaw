@@ -1,0 +1,70 @@
+"""Workspace assembly template.
+
+Start from intake facts and add only the topology this setup actually needs.
+Do not assume a wrist camera, manipulator tool, simulator target, or arm-only
+control group unless the embodiment requires them.
+"""
+
+from roboclaw.embodied.definition.components.robots import RobotConfig
+from roboclaw.embodied.definition.systems.assemblies import AssemblyBlueprint, RobotAttachment
+from roboclaw.embodied.execution.integration.carriers.real import build_real_ros2_target
+from roboclaw.embodied.execution.integration.transports.ros2 import build_standard_ros2_contract
+from roboclaw.embodied.workspace import (
+    WORKSPACE_SCHEMA_VERSION,
+    WorkspaceAssetContract,
+    WorkspaceAssetKind,
+    WorkspaceExportConvention,
+    WorkspaceProvenance,
+)
+
+WORKSPACE_ASSET = WorkspaceAssetContract(
+    kind=WorkspaceAssetKind.ASSEMBLY,
+    schema_version=WORKSPACE_SCHEMA_VERSION,
+    export_convention=WorkspaceExportConvention.ASSEMBLY,
+    provenance=WorkspaceProvenance(
+        source="workspace_template",
+        generator="roboclaw_agent",
+        generated_by="<generated_by>",
+        generated_at="<generated_at_iso8601>",
+        source_session="<source_session_id>",
+    ),
+)
+
+PRIMARY_ROBOT_CONFIG = RobotConfig(
+    instance_id="<robot_instance_id>",
+    calibration_dir="<calibration_dir_or_none>",
+    base_frame="<base_frame>",
+    tool_frame="<tool_frame_or_none>",
+)
+
+REAL_TARGET = build_real_ros2_target(
+    target_id="<target_id>",
+    description="<target_description>",
+    ros2=build_standard_ros2_contract("<assembly_id>", "<target_id>"),
+)
+
+ASSEMBLY = AssemblyBlueprint(
+    id="<assembly_id>",
+    name="<assembly_name>",
+    description="<assembly_description>",
+    robots=(
+        RobotAttachment(
+            attachment_id="<primary_robot_attachment_id>",
+            robot_id="<robot_id>",
+            config=PRIMARY_ROBOT_CONFIG,
+        ),
+    ),
+    sensors=(),
+    execution_targets=(REAL_TARGET,),
+    default_execution_target_id="<target_id>",
+    frame_transforms=(),
+    tools=(),
+    control_groups=(),
+    safety_zones=(),
+    safety_boundaries=(),
+    failure_domains=(),
+    resource_ownerships=(),
+    notes=(
+        "Add sensors, control groups, safety boundaries, and simulator targets only when intake confirms them.",
+    ),
+).build()

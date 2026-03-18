@@ -1,0 +1,15 @@
+{
+  "episodes": [
+    {
+      "episode_id": 0,
+      "task": "test",
+      "length": 5
+    },
+    {
+      "episode_id": 1,
+      "task": "test",
+      "length": 5
+    }
+  ],
+  "total_steps": 10
+}

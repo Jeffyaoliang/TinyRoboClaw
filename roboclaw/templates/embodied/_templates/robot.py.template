@@ -1,0 +1,118 @@
+"""Workspace robot manifest template.
+
+Replace every placeholder from intake facts. This scaffold is intentionally
+generic so it can describe arms, bases, hands, humanoids, or drones.
+"""
+
+from roboclaw.embodied.definition.components.robots import PrimitiveSpec, RobotManifest
+from roboclaw.embodied.definition.foundation.schema import (
+    ActionSchema,
+    CapabilityFamily,
+    CommandMode,
+    CompletionSemantics,
+    CompletionSpec,
+    FeedbackMode,
+    HealthFieldSpec,
+    HealthSchema,
+    ObservationFieldSpec,
+    ObservationSchema,
+    ParameterSpec,
+    PrimitiveKind,
+    RobotType,
+    SafetyProfile,
+    ToleranceSpec,
+    ValueUnit,
+)
+from roboclaw.embodied.workspace import (
+    WORKSPACE_SCHEMA_VERSION,
+    WorkspaceAssetContract,
+    WorkspaceAssetKind,
+    WorkspaceExportConvention,
+    WorkspaceProvenance,
+)
+
+WORKSPACE_ASSET = WorkspaceAssetContract(
+    kind=WorkspaceAssetKind.ROBOT,
+    schema_version=WORKSPACE_SCHEMA_VERSION,
+    export_convention=WorkspaceExportConvention.ROBOT,
+    provenance=WorkspaceProvenance(
+        source="workspace_template",
+        generator="roboclaw_agent",
+        generated_by="<generated_by>",
+        generated_at="<generated_at_iso8601>",
+        source_session="<source_session_id>",
+    ),
+)
+
+ROBOT = RobotManifest(
+    id="<robot_id>",
+    name="<robot_name>",
+    description="<robot_description>",
+    robot_type=RobotType.<robot_type_enum>,
+    capability_families=(
+        CapabilityFamily.LIFECYCLE,
+        CapabilityFamily.<primary_capability_family_enum>,
+    ),
+    primitives=(
+        PrimitiveSpec(
+            name="<primitive_name>",
+            kind=PrimitiveKind.<primitive_kind_enum>,
+            capability_family=CapabilityFamily.<primary_capability_family_enum>,
+            command_mode=CommandMode.<command_mode_enum>,
+            description="<primitive_description>",
+            parameters=(
+                ParameterSpec(
+                    name="<parameter_name>",
+                    value_type="<parameter_type>",
+                    description="<parameter_description>",
+                    required=True,
+                    unit=ValueUnit.<parameter_unit_enum>,
+                    frame="<parameter_frame_or_none>",
+                ),
+            ),
+            tolerance=ToleranceSpec(
+                absolute=<absolute_tolerance_or_none>,
+                settle_time_s=<settle_time_s_or_none>,
+            ),
+            action_schema=ActionSchema(
+                id="<action_schema_id>",
+                command_mode=CommandMode.<command_mode_enum>,
+                feedback_mode=FeedbackMode.<feedback_mode_enum>,
+                parameter_order=("<parameter_name>",),
+                command_frame="<command_frame_or_none>",
+                command_rate_hz=<command_rate_hz_or_none>,
+            ),
+            completion=CompletionSpec(
+                semantics=CompletionSemantics.<completion_semantics_enum>,
+                timeout_s=<completion_timeout_s_or_none>,
+            ),
+            backed_by=("<backend_primitive>",),
+        ),
+    ),
+    observation_schema=ObservationSchema(
+        id="<observation_schema_id>",
+        fields=(
+            ObservationFieldSpec(
+                name="<observation_field_name>",
+                value_type="<observation_field_type>",
+                description="<observation_field_description>",
+                unit=ValueUnit.<observation_unit_enum>,
+                frame="<observation_frame_or_none>",
+            ),
+        ),
+        frequency_hz=<observation_frequency_hz_or_none>,
+    ),
+    health_schema=HealthSchema(
+        id="<health_schema_id>",
+        fields=(
+            HealthFieldSpec(
+                name="<health_field_name>",
+                value_type="<health_field_type>",
+                description="<health_field_description>",
+            ),
+        ),
+    ),
+    safety=SafetyProfile(
+        default_reset_mode="<default_reset_mode>",
+    ),
+)

@@ -1,0 +1,34 @@
+"""Workspace simulator world template."""
+
+from roboclaw.embodied.definition.foundation.schema import SimulatorKind
+from roboclaw.embodied.definition.systems.simulators import SimulatorWorld
+from roboclaw.embodied.workspace import (
+    WORKSPACE_SCHEMA_VERSION,
+    WorkspaceAssetContract,
+    WorkspaceAssetKind,
+    WorkspaceExportConvention,
+    WorkspaceProvenance,
+)
+
+WORKSPACE_ASSET = WorkspaceAssetContract(
+    kind=WorkspaceAssetKind.WORLD,
+    schema_version=WORKSPACE_SCHEMA_VERSION,
+    export_convention=WorkspaceExportConvention.WORLD,
+    provenance=WorkspaceProvenance(
+        source="workspace_template",
+        generator="roboclaw_agent",
+        generated_by="<generated_by>",
+        generated_at="<generated_at_iso8601>",
+        source_session="<source_session_id>",
+    ),
+)
+
+WORLD = SimulatorWorld(
+    id="<world_id>",
+    simulator=SimulatorKind.<simulator_kind_enum>,
+    description="<world_description>",
+    assets=("<scene_path_or_name>",),
+    notes=(
+        "Workspace simulator world.",
+    ),
+)

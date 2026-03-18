@@ -1,0 +1,43 @@
+"""Workspace deployment profile template.
+
+Keep this file setup-specific. Attachment ids and connection keys must match
+the generated assembly and adapter for the active user environment.
+"""
+
+from roboclaw.embodied.definition.systems.deployments import DeploymentProfile
+from roboclaw.embodied.workspace import (
+    WORKSPACE_SCHEMA_VERSION,
+    WorkspaceAssetContract,
+    WorkspaceAssetKind,
+    WorkspaceExportConvention,
+    WorkspaceProvenance,
+)
+
+WORKSPACE_ASSET = WorkspaceAssetContract(
+    kind=WorkspaceAssetKind.DEPLOYMENT,
+    schema_version=WORKSPACE_SCHEMA_VERSION,
+    export_convention=WorkspaceExportConvention.DEPLOYMENT,
+    provenance=WorkspaceProvenance(
+        source="workspace_template",
+        generator="roboclaw_agent",
+        generated_by="<generated_by>",
+        generated_at="<generated_at_iso8601>",
+        source_session="<source_session_id>",
+    ),
+)
+
+DEPLOYMENT = DeploymentProfile(
+    id="<deployment_id>",
+    assembly_id="<assembly_id>",
+    target_id="<target_id>",
+    connection={
+        "<connection_key>": "<connection_value>",
+    },
+    robots={
+        "<robot_attachment_id>": {
+            "<robot_connection_key>": "<robot_connection_value>",
+        },
+    },
+    sensors={},
+    safety_overrides={},
+)

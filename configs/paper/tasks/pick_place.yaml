@@ -1,0 +1,18 @@
+task_name: pick_place
+task_instruction: "pick up the red block and place it on the blue plate"
+inverse_instruction: "pick up the red block from the blue plate and return it to its original position"
+
+eap:
+  episodes_per_batch: 50
+  max_steps_per_episode: 200
+  success_threshold: 0.5
+
+flywheel:
+  num_iterations: 5
+  episodes_per_iteration: 50
+  data_dir: data/paper/pick_place
+  export_format: lerobot
+
+sim:
+  num_objects: 3
+  image_size: [224, 224]

@@ -1,0 +1,50 @@
+vlm:
+  provider: openai
+  model: gpt-4o
+  temperature: 0.3
+  max_tokens: 4096
+  max_iterations: 40
+
+policy_server:
+  host: localhost
+  port: 8000
+  ws_url: ws://localhost:8000
+  model_name: pi0_fast_base
+  action_chunk_size: 50
+
+trainer:
+  lora_rank: 16
+  lora_alpha: 16
+  train_steps: 10000
+  batch_size: 16
+  learning_rate: 0.0001
+  save_interval: 2000
+  openpi_dir: ~/openpi
+  output_dir: checkpoints
+
+eap:
+  episodes_per_batch: 50
+  max_steps_per_episode: 200
+  success_threshold: 0.5
+
+flywheel:
+  num_iterations: 5
+  episodes_per_iteration: 50
+  data_dir: data/paper
+  export_format: lerobot
+
+deployment:
+  monitor_interval: 2.0
+  max_retries: 3
+  failure_threshold: 0.3
+  collect_deployment_data: true
+
+sim:
+  workspace_bounds: [0.0, 0.0, 0.0, 0.5, 0.5, 0.3]
+  num_objects: 3
+  image_size: [224, 224]
+  dt: 0.05
+
+task_name: default
+task_instruction: "pick up the object and place it in the target area"
+inverse_instruction: "return the object to its original position"

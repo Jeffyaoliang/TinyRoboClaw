@@ -1,0 +1,31 @@
+task_name: k1_pick_place
+task_instruction: "pick up the object and place it in the target area"
+inverse_instruction: "pick up the object from the target area and return it to its original position"
+
+vlm:
+  model: gpt-4o
+  temperature: 0.3
+
+policy_server:
+  host: localhost
+  port: 8000
+  ws_url: ws://localhost:8000
+  model_name: pi0_fast_base
+  action_chunk_size: 50
+
+eap:
+  episodes_per_batch: 20
+  max_steps_per_episode: 150
+  success_threshold: 0.5
+
+flywheel:
+  num_iterations: 3
+  episodes_per_iteration: 20
+  data_dir: data/paper/k1_pick_place
+  export_format: lerobot
+
+trainer:
+  lora_rank: 16
+  lora_alpha: 16
+  train_steps: 5000
+  batch_size: 16

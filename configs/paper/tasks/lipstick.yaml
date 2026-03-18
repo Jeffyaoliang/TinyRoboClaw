@@ -1,0 +1,18 @@
+task_name: lipstick
+task_instruction: "insert the lipstick into the holder"
+inverse_instruction: "remove the lipstick from the holder"
+
+eap:
+  episodes_per_batch: 50
+  max_steps_per_episode: 150
+  success_threshold: 0.5
+
+flywheel:
+  num_iterations: 5
+  episodes_per_iteration: 50
+  data_dir: data/paper/lipstick
+  export_format: lerobot
+
+sim:
+  num_objects: 2
+  image_size: [224, 224]

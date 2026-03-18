@@ -1,0 +1,140 @@
+"""Workspace adapter binding template."""
+
+from roboclaw.embodied.definition.foundation.schema import TransportKind
+from roboclaw.embodied.execution.integration.adapters import (
+    AdapterBinding,
+    AdapterCompatibilitySpec,
+    AdapterHealthMode,
+    AdapterLifecycleContract,
+    AdapterOperation,
+    CompatibilityComponent,
+    DegradedModeSpec,
+    DependencyKind,
+    DependencySpec,
+    ErrorCategory,
+    ErrorCodeSpec,
+    OperationTimeout,
+    TimeoutPolicy,
+    VersionConstraint,
+)
+from roboclaw.embodied.workspace import (
+    WORKSPACE_SCHEMA_VERSION,
+    WorkspaceAssetContract,
+    WorkspaceAssetKind,
+    WorkspaceExportConvention,
+    WorkspaceProvenance,
+)
+
+WORKSPACE_ASSET = WorkspaceAssetContract(
+    kind=WorkspaceAssetKind.ADAPTER,
+    schema_version=WORKSPACE_SCHEMA_VERSION,
+    export_convention=WorkspaceExportConvention.ADAPTER,
+    provenance=WorkspaceProvenance(
+        source="workspace_template",
+        generator="roboclaw_agent",
+        generated_by="<generated_by>",
+        generated_at="<generated_at_iso8601>",
+        source_session="<source_session_id>",
+    ),
+)
+
+LIFECYCLE = AdapterLifecycleContract(
+    dependencies=(
+        DependencySpec(
+            id="ros2_bridge",
+            kind=DependencyKind.ROS2_NODE,
+            description="ROS2 bridge node that serves this adapter.",
+            checker="<dependency_checker>",
+        ),
+    ),
+    timeout_policy=TimeoutPolicy(
+        default_timeout_s=15.0,
+        operations=(
+            OperationTimeout(
+                operation=AdapterOperation.CONNECT,
+                timeout_s=30.0,
+                retries=1,
+                backoff_s=1.0,
+            ),
+            OperationTimeout(
+                operation=AdapterOperation.RESET,
+                timeout_s=20.0,
+                retries=0,
+            ),
+        ),
+    ),
+    error_codes=(
+        ErrorCodeSpec(
+            code="DEP_MISSING",
+            category=ErrorCategory.DEPENDENCY,
+            description="Required dependency is unavailable.",
+            recoverable=False,
+            related_operation=AdapterOperation.DEPENDENCY_CHECK,
+        ),
+        ErrorCodeSpec(
+            code="CONNECT_TIMEOUT",
+            category=ErrorCategory.TIMEOUT,
+            description="Adapter connect timed out.",
+            recoverable=True,
+            retryable=True,
+            related_operation=AdapterOperation.CONNECT,
+        ),
+        ErrorCodeSpec(
+            code="TRANSPORT_UNAVAILABLE",
+            category=ErrorCategory.TRANSPORT,
+            description="Underlying transport is unavailable.",
+            recoverable=True,
+            retryable=True,
+        ),
+    ),
+)
+
+DEGRADED_MODES = (
+    DegradedModeSpec(
+        mode=AdapterHealthMode.DEGRADED,
+        description="Core motion path is unavailable but diagnostics and recovery remain active.",
+        allowed_operations=(
+            AdapterOperation.READY,
+            AdapterOperation.STOP,
+            AdapterOperation.RECOVER,
+        ),
+        entered_on_error_codes=("TRANSPORT_UNAVAILABLE",),
+    ),
+)
+
+COMPATIBILITY = AdapterCompatibilitySpec(
+    adapter_api_version="1.0",
+    constraints=(
+        VersionConstraint(
+            component=CompatibilityComponent.TRANSPORT,
+            target="ros2",
+            requirement=">=1.0,<2.0",
+        ),
+        VersionConstraint(
+            component=CompatibilityComponent.BRIDGE,
+            target="<bridge_id>",
+            requirement=">=1.0,<2.0",
+            required=False,
+        ),
+        VersionConstraint(
+            component=CompatibilityComponent.WORKSPACE_SCHEMA,
+            target="workspace_asset_contract",
+            requirement=">=1.0,<2.0",
+        ),
+    ),
+)
+
+ADAPTER = AdapterBinding(
+    id="<adapter_id>",
+    assembly_id="<assembly_id>",
+    transport=TransportKind.ROS2,
+    implementation="<workspace_module_or_entrypoint>",
+    supported_targets=("real",),
+    bridge_id="<bridge_id>",
+    lifecycle=LIFECYCLE,
+    degraded_modes=DEGRADED_MODES,
+    compatibility=COMPATIBILITY,
+    notes=(
+        "Workspace-specific adapter binding.",
+    ),
+)

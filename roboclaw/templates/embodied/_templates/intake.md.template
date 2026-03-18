@@ -1,0 +1,40 @@
+# Setup Intake: <setup_id>
+
+## Robot
+
+- Robot id:
+- Family:
+- Reuse built-in manifest:
+
+## Sensors
+
+- Attachment id:
+- Sensor type:
+- Mount:
+- Driver/config:
+
+## ROS2
+
+- Namespace:
+- State topic:
+- Health topic:
+- Events topic:
+- Execute action:
+- Connect service:
+- Reset service:
+
+## Targets
+
+- Real target:
+- Simulator target(s):
+
+## Deployment Facts
+
+- Serial/IP:
+- Camera device ids:
+- Calibration paths:
+- Safety overrides:
+
+## Open Questions
+
+- 
